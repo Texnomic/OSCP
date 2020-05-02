@@ -30,6 +30,21 @@
     ldapsearch -x -h <RHOST> -D '' -w '' -b "DC=domain,DC=local"
     ```
 
+    > **DirSearch**: Web Enumerating
+
+    ```pwsh
+    dirsearch -u http://<RHOST>:<RPORT>/ -t 16 -r -e txt,html,php,asp,aspx,jsp -f -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt tcp_80_http_dirsearch_dirbuster.txt" --exclude-texts="<TEXT>"
+     ```
+
+
++ ### Fuzzing
+
+    > **WFuzz**: Fuzzing HTTP POST Data
+
+    ```pwsh
+    wfuzz -c -z file,<FUZZ-FILE> -v --hs "<BAD-TEXT>" -d "<PARAMETER>=FUZZ" "http://<RHOS>:<RPORT>/<RPATH>"
+    ```
+
 + ### Remote Access
 
     > **Remote Desktop Connection**:
@@ -88,15 +103,15 @@
     > Dynamic with SSH & ProxyChains
 
     ```pwsh
-    > ssh -D 12345 <RUSER>@<RHOST> -p 22
-    > export PROXYCHAINS_SOCKS5=12345
+    > ssh -D 9050 <RUSER>@<RHOST> -p 22
+    > export PROXYCHAINS_SOCKS5=9050
     > proxychains nmap -Pn -n -v -sV -sC <IP>
     ```
 
     > Static with SSH
 
     ```pwsh
-    ssh -g -L <LPORT>:localhost:<RPORT> <RHOST>
+    ssh -g -L <LPORT>:localhost:<RPORT> <RUSER>@<RHOST>
     ```
 
 + ### Password Cracking
