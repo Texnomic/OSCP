@@ -76,13 +76,13 @@
 
 + ### Compiling
 
-    > x64 Compile
+    > Windows x64
 
     ```pwsh
     x86_64-w64-mingw32-gcc Source.c -o File.exe
     ```
 
-    > x86 Compile
+    > Windows x86
 
     ```pwsh
     i686-w64-mingw32-gcc Source.c -o File.exe -lws2_32
@@ -167,6 +167,13 @@
     ```pwsh
     Vict> netsh advfirewall firewall add rule name="forward_port_rule" protcol=TCP dir=in localip=<A-HOST> localport=<A-PORT> action=allow
     Vict> netsh interface portproxy add v4tov4 listenport=<A-LPORT> listenaddress=<A-HOST> connectport=<B-PORT> connectaddress=<B-HOST>
+    ```
+
+    > Forward Static with HttpTunnel: Kali => Victim A => Victim B
+
+    ```pwsh
+    Kali$
+    VicA$
     ```
 
 + ### Password Cracking
