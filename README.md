@@ -36,6 +36,17 @@
     dirsearch -u http://<RHOST>:<RPORT>/ -t 16 -r -e txt,html,php,asp,aspx,jsp -f -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt --exclude-texts="<TEXT>"
      ```
 
+    > **DotDotPwn**: Directory Traversal
+
+    ```pwsh
+    dotdotpwn -m http-url -u 'http://<RHOST>/TRAVERSAL' -X -M GET -b -o unix -d 15 -k '<TEXT>'
+     ```
+
+    > **Pspy**: System Events Monitoring
+
+    ```pwsh
+    timeout 60s ./pspy<32/64>
+     ```
 
 + ### Fuzzing
 
@@ -204,11 +215,30 @@
     export PATH=$PATH:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/bin:/sbin
     ```
 
-    > Fixing TTY
+    > Fixing: Shell Interactivity
 
     ```pwsh
     Vict$ python -c 'import pty; pty.spawn("/bin/sh")'
     Vict$ python -c 'import pty; pty.spawn("/bin/bash")'
+    ```
+
+    > Fixing: Can't access tty; job control turned off
+
+    ```pwsh
+    Kali$ CTRL-Z
+    Kali$ stty -a
+    Kali$ stty -echo raw
+    Kali$ fg
+    Kali$ .
+    Kali$ reset
+    Vict$ export TERM=screen
+    Vict$ stty rows <ROWS> columns <COLUMNS>
+    ```
+
++ ### SUDO Commands
+
+    ```pwsh
+    Vict$ sudo -l
     ```
 
 + ### Process List
